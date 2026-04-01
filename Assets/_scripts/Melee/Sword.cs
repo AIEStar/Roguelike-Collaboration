@@ -4,15 +4,44 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Transform PlayerObject;
+    
+    Player PlayerScript;
+
+    float knockback = 3;
+    Vector3 knockbackDir = Vector3.forward + (Vector3.up * 1.8f);
+
     void Start()
     {
-        
+        PlayerScript = PlayerObject.GetComponentInParent<Player>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        
+        if (collision.body.CompareTag("Enemy"))
+        {
+            //knockback
+            ContactPoint contact = collision.contacts[0];
+            Vector3 newKnockback = (PlayerObject.rotation * knockbackDir) * knockback;
+            collision.body.GetComponent<Rigidbody>().AddForceAtPosition(newKnockback, contact.point, ForceMode.Impulse);
+
+            //custom actions
+            collision.body.GetComponent<Enemy>().MeleeHit();
+        }
+    }
+
+    private void SwingFinished()
+    {
+        PlayerScript.SwingCooldown(false);
+    }
+
+    private void SwapAwayFinished()
+    {
+        PlayerScript.SwapRangedIn();
+    }
+
+    private void SwapInFinished()
+    {
+        PlayerScript.SwingCooldown(false);
     }
 }

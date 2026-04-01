@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class camera : MonoBehaviour
 {
@@ -12,12 +12,19 @@ public class camera : MonoBehaviour
 
     void Start()
     {
-        playerOffset = Target.position - transform.position;
+        playerOffset = transform.position - Target.position;
+    }
+
+    private void Update()
+    {
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+        transform.Rotate(-mouseY, mouseX, 0);
     }
 
     void FixedUpdate()
     {
-        Vector3 targetPos = Target.position + playerOffset;
-        transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, 0.1f);
+        //Vector3 targetPos = Target.position + playerOffset;
+        //transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, 0.1f);
     }
 }
