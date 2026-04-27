@@ -13,7 +13,7 @@ public class Sword : MonoBehaviour
 
     void Start()
     {
-        PlayerScript = PlayerObject.GetComponentInParent<Player>();
+        PlayerScript = PlayerObject.GetComponent<Player>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -38,6 +38,7 @@ public class Sword : MonoBehaviour
     private void SwapAwayFinished()
     {
         PlayerScript.SwapRangedIn();
+        gameObject.SetActive(false);
     }
 
     private void SwapInFinished()

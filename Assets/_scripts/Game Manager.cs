@@ -1,16 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.UI;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public RenderTexture weaponRender;
+    public RawImage weaponRender;
+    public Camera weaponRenderCamera;
 
-    void Start()
+    private void Start()
     {
-        weaponRender.width = Screen.width;
-        weaponRender.height = Screen.height;
+        //weaponRenderCamera.targetTexture.Release();
+        //RenderTexture newTexture = new(Screen.width, Screen.height, 24);
+        //weaponRenderCamera.targetTexture = newTexture;
+        //weaponRender.texture = newTexture;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+            #if (UNITY_EDITOR)
+                EditorApplication.isPaused = true;
+            #endif
+        }
     }
 
 }

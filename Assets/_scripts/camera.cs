@@ -7,24 +7,34 @@ using UnityEngine;
 public class camera : MonoBehaviour
 {
     public Transform Target;
+    public Player PlayerScript;
     Vector3 playerOffset;
     Vector3 velocity = Vector3.zero;
 
     void Start()
     {
         playerOffset = transform.position - Target.position;
+        Collide(false);
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
-        transform.Rotate(-mouseY, mouseX, 0);
+        if(other.CompareTag("Enemy"))
+        {
+            PlayerScript.EnemySpotted(1);
+        }
+    }
+    
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            PlayerScript.EnemySpotted(-1);
+        }
     }
 
-    void FixedUpdate()
+    public void Collide(bool state)
     {
-        //Vector3 targetPos = Target.position + playerOffset;
-        //transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, 0.1f);
+        GetComponent<Collider>().enabled = state;
     }
 }

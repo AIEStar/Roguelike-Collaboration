@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     bool swing = false;
     bool shoot = false;
     bool melee = true;
+    int enemiesInSight = 0;
     
     CharacterController character;
 
@@ -27,11 +28,14 @@ public class Player : MonoBehaviour
     public float movementSpeed;
 
     public Transform RHWeapon;
-    public Animator SwordAnimator;
+    public Animator MeleeAnimator;
+    public Animator RangedAnimator;
+    public Cooldown cooldown;
 
     void Start()
     {
         character = GetComponent<CharacterController>();
+        MeleeAnimator.SetTrigger("Idle");
     }
 
     void Update()
@@ -56,11 +60,11 @@ public class Player : MonoBehaviour
         //  movement
         float horzInput = Input.GetAxis("Horizontal");
         float vertInput = Input.GetAxis("Vertical");
-        Vector3 moveDir = (horzInput * Vector3.right) + (vertInput * Vector3.forward);
+        //Vector3 moveDir = (horzInput * Vector3.right) + (vertInput * Vector3.forward);
 
-        character.Move(moveDir * movementSpeed * Time.deltaTime);
+        //character.Move(moveDir * movementSpeed * Time.deltaTime);
 
-        if(horzInput == 0 && vertInput == 0)
+        if (horzInput == 0 && vertInput == 0)
         {
             animationWobbleDivisor = wobbleDivisorIdle;
             animationSpeed = wobbleSpeedIdle;
@@ -75,33 +79,32 @@ public class Player : MonoBehaviour
         //  melee
         if (Input.GetMouseButtonDown(0) && !swing)
         {
-            SwingCooldown(true);
-
+            animate = false;
             if(!melee)
             {
                 melee = true;
-                shoot = true;
+                RangedAnimator.SetTrigger("SwapAway");
             } 
             else
             {
-                SwordAnimator.SetTrigger("Swing");
+                MeleeAnimator.SetTrigger("Swing");
+                SwingCooldown(true);
             }
         }
 
         //ranged
         if (Input.GetMouseButtonDown(1) && !shoot)
         {
-            ShootCooldown(true);
-
+            animate = false;
             if (melee)
             {
                 melee = false;
-                swing = true;
-                SwordAnimator.SetTrigger("SwapAway");
+                MeleeAnimator.SetTrigger("SwapAway");
             }
             else
             {
-                SwordAnimator.SetTrigger("Swing");
+                RangedAnimator.SetTrigger("Shoot");
+                ShootCooldown(true);
             }
         }
     }
@@ -120,14 +123,32 @@ public class Player : MonoBehaviour
 
     public void SwapMeleeIn()
     {
-        SwingCooldown(true);
-        ShootCooldown(true);
-        SwordAnimator.SetTrigger("SwapIn");
+        MeleeAnimator.gameObject.SetActive(true);
+        MeleeAnimator.SetTrigger("SwapIn");
+        cooldown.Switch(false, false);
+        enemiesInSight = 0;
     }
 
     public void SwapRangedIn()
     {
-        SwingCooldown(true);
-        ShootCooldown(true);
+        RangedAnimator.gameObject.SetActive(true);
+        RangedAnimator.SetTrigger("SwapIn");
+        cooldown.Switch(true, false);
+    }
+
+    public void EnemySpotted(int amount)
+    {
+        enemiesInSight += amount;
+        if(enemiesInSight <= 0)
+        {
+            enemiesInSight = 0;
+            if (!melee)
+                cooldown.Switch(true, false);
+        }
+        else
+        {
+            if (!melee)
+                cooldown.Switch(true, true);
+        }
     }
 }
