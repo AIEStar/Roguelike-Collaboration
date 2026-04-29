@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public Material hitMaterial;
+    public Material hitMaterial2;
     public Material normMaterial;
 
     MeshRenderer render;
@@ -21,6 +22,6 @@ public class Enemy : MonoBehaviour
 
     public void RangedHit()
     {
-
+        render.material = hitMaterial2;
     }
 }

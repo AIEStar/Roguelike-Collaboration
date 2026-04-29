@@ -164,6 +164,7 @@ MonoBehaviour:
   MeleeAnimator: {fileID: 3416180971585248111}
   RangedAnimator: {fileID: 3335841187068898205}
   cooldown: {fileID: 0}
+  cam: {fileID: 2202544842527750544}
 --- !u!143 &4263498769985019356
 CharacterController:
   m_ObjectHideFlags: 0

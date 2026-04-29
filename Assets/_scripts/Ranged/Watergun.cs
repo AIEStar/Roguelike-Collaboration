@@ -8,7 +8,7 @@ public class Watergun : MonoBehaviour
     public Transform PlayerObject;
     public GameObject BallPrefab;
     public Transform NozzlePos;
-    public Transform AimPos;
+    public LayerMask mask;
     
     Player PlayerScript;
 
@@ -53,7 +53,9 @@ public class Watergun : MonoBehaviour
 
     private void DispenseParticle()
     {
-       GameObject newBall = Instantiate(BallPrefab, NozzlePos.position, Quaternion.LookRotation(AimPos.position - NozzlePos.position, Vector3.up));
-        print("hi");
+        if(Physics.Raycast(PlayerScript.cam.transform.position, PlayerScript.cam.transform.forward, out RaycastHit info, 1000, ~mask))
+        {
+            Instantiate(BallPrefab, NozzlePos.position, Quaternion.LookRotation(info.point - NozzlePos.position, Vector3.up));
+        }
     }
 }

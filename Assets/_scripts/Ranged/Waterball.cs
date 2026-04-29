@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
+using System.Linq;
 
 public class Waterball : MonoBehaviour
 {
@@ -13,6 +12,8 @@ public class Waterball : MonoBehaviour
     public GameObject BallEnd;
 
     GameObject ball;
+    GameObject end;
+    GameObject hit;
     Quaternion dir;
     Rigidbody rb;
     bool prehit = false;
@@ -31,10 +32,11 @@ public class Waterball : MonoBehaviour
     {
         if(!prehit)
         {
-            float predictionDistance = rb.velocity.magnitude * Time.fixedDeltaTime * 3;
-            if (rb.SweepTest(transform.forward, out _, predictionDistance))
+            RaycastHit hit;
+            float predictionDistance = rb.velocity.magnitude * 3;
+            if (rb.SweepTest(transform.forward, out hit, predictionDistance))
             {
-                PreHit();
+                PreHit(hit.distance / rb.velocity.magnitude);
             }
         }
     }
@@ -43,16 +45,43 @@ public class Waterball : MonoBehaviour
     {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        GameObject hit = Instantiate(ExplodeParticle, transform);
+        hit = Instantiate(ExplodeParticle, transform);
         hit.transform.rotation = dir;
+
+        if (other.CompareTag("Enemy"))
+        {
+            //custom actions
+            other.GetComponent<Enemy>().RangedHit();
+        }
+
+        StartCoroutine(DestroyAfterTime(hit.GetComponent<ParticleSystem>().main.duration));
     }
 
-    public void PreHit()
+    void PreHit(float time)
     {
         prehit = true;
-        print("pre");
         Destroy(ball);
-        GameObject end = Instantiate(BallEnd, transform);
+        ParticleSystem ps = BallEnd.GetComponent<ParticleSystem>();
+        var main = ps.main;
+        if(time < main.duration)
+        {
+            float spd = (main.duration / time);
+            main.simulationSpeed = spd;
+            ParticleSystem[] children = BallEnd.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem child in children)
+            {
+                var childMain = child.main;
+                childMain.simulationSpeed = spd;
+            }
+        }
+        end = Instantiate(BallEnd, transform);
         end.transform.rotation = dir;
+    }
+
+    IEnumerator DestroyAfterTime(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        Destroy(gameObject);
     }
 }

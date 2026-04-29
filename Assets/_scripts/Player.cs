@@ -22,8 +22,6 @@ public class Player : MonoBehaviour
     bool melee = true;
     int enemiesInSight = 0;
     
-    CharacterController character;
-
     public float animationSpeed = 1;
     public float movementSpeed;
 
@@ -31,10 +29,10 @@ public class Player : MonoBehaviour
     public Animator MeleeAnimator;
     public Animator RangedAnimator;
     public Cooldown cooldown;
+    public Camera cam;
 
     void Start()
     {
-        character = GetComponent<CharacterController>();
         MeleeAnimator.SetTrigger("Idle");
     }
 

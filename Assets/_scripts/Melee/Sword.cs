@@ -7,6 +7,7 @@ public class Sword : MonoBehaviour
     public Transform PlayerObject;
     
     Player PlayerScript;
+    Collider obj;
 
     float knockback = 3;
     Vector3 knockbackDir = Vector3.forward + (Vector3.up * 1.8f);
@@ -14,6 +15,7 @@ public class Sword : MonoBehaviour
     void Start()
     {
         PlayerScript = PlayerObject.GetComponent<Player>();
+        obj = GetComponentInChildren<Collider>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -44,5 +46,11 @@ public class Sword : MonoBehaviour
     private void SwapInFinished()
     {
         PlayerScript.SwingCooldown(false);
+        obj.isTrigger = false;
+    }
+
+    private void ColliderOff()
+    {
+        obj.isTrigger = true;
     }
 }
