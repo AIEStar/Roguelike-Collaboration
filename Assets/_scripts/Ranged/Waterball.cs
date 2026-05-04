@@ -6,8 +6,9 @@ using System.Linq;
 public class Waterball : MonoBehaviour
 {
     const float power = 500;
+    const float timeMin = 1.2f;
 
-    public GameObject ExplodeParticle; 
+    public GameObject Hit; 
     public GameObject BallStart;
     public GameObject BallEnd;
 
@@ -17,6 +18,8 @@ public class Waterball : MonoBehaviour
     Quaternion dir;
     Rigidbody rb;
     bool prehit = false;
+    float hitDuration;
+    float endDuration;
 
     void Start()
     {
@@ -25,6 +28,9 @@ public class Waterball : MonoBehaviour
         dir = Quaternion.Euler(transform.eulerAngles + new Vector3(90, 0, 0));
         ball.transform.rotation = dir;
 
+        hitDuration = Hit.GetComponent<ParticleSystem>().main.duration;
+        endDuration = BallEnd.GetComponent<ParticleSystem>().main.duration;
+
         rb.AddForce(transform.rotation * (Vector3.forward * power));
     }
 
@@ -32,9 +38,8 @@ public class Waterball : MonoBehaviour
     {
         if(!prehit)
         {
-            RaycastHit hit;
-            float predictionDistance = rb.velocity.magnitude * 3;
-            if (rb.SweepTest(transform.forward, out hit, predictionDistance))
+            float predictionDistance = rb.velocity.magnitude * endDuration;
+            if (rb.SweepTest(transform.forward, out RaycastHit hit, predictionDistance))
             {
                 PreHit(hit.distance / rb.velocity.magnitude);
             }
@@ -43,9 +48,10 @@ public class Waterball : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Destroy(ball);
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        hit = Instantiate(ExplodeParticle, transform);
+        hit = Instantiate(Hit, transform);
         hit.transform.rotation = dir;
 
         if (other.CompareTag("Enemy"))
@@ -54,13 +60,16 @@ public class Waterball : MonoBehaviour
             other.GetComponent<Enemy>().RangedHit();
         }
 
-        StartCoroutine(DestroyAfterTime(hit.GetComponent<ParticleSystem>().main.duration));
+        StartCoroutine(DestroyAfterTime(hitDuration, gameObject));
     }
 
     void PreHit(float time)
     {
         prehit = true;
-        Destroy(ball);
+        if(time < timeMin)
+        {
+            return;
+        }
         ParticleSystem ps = BallEnd.GetComponent<ParticleSystem>();
         var main = ps.main;
         if(time < main.duration)
@@ -76,12 +85,15 @@ public class Waterball : MonoBehaviour
         }
         end = Instantiate(BallEnd, transform);
         end.transform.rotation = dir;
+        DestroyAfterTime(timeMin / 2, ball);
+
+        StartCoroutine(DestroyAfterTime(hitDuration + time, gameObject));
     }
 
-    IEnumerator DestroyAfterTime(float seconds)
+    IEnumerator DestroyAfterTime(float seconds, GameObject obj)
     {
         yield return new WaitForSeconds(seconds);
 
-        Destroy(gameObject);
+        Destroy(obj);
     }
 }

@@ -121,7 +121,6 @@ public class Player : MonoBehaviour
 
     public void SwapMeleeIn()
     {
-        MeleeAnimator.gameObject.SetActive(true);
         MeleeAnimator.SetTrigger("SwapIn");
         cooldown.Switch(false, false);
         enemiesInSight = 0;
@@ -129,7 +128,6 @@ public class Player : MonoBehaviour
 
     public void SwapRangedIn()
     {
-        RangedAnimator.gameObject.SetActive(true);
         RangedAnimator.SetTrigger("SwapIn");
         cooldown.Switch(true, false);
     }

@@ -746,11 +746,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3906260109346270400, guid: 1c85576ee78c5e04b9757e54274df274, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.129
+      value: 1.91
       objectReference: {fileID: 0}
     - target: {fileID: 3906260109346270400, guid: 1c85576ee78c5e04b9757e54274df274, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.82
+      value: 4.14
       objectReference: {fileID: 0}
     - target: {fileID: 3906260109346270400, guid: 1c85576ee78c5e04b9757e54274df274, type: 3}
       propertyPath: m_LocalRotation.w
@@ -902,6 +902,10 @@ PrefabInstance:
     - target: {fileID: 1202475617178069600, guid: 59b75ed97c169034eace868101dd3484, type: 3}
       propertyPath: m_Name
       value: MoonSword 4b Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 1218223292218164556, guid: 59b75ed97c169034eace868101dd3484, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1065,6 +1069,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1772833433994729551, guid: ae5d9368e0ef5f2408a5d81d71735744, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2393254299003279629, guid: ae5d9368e0ef5f2408a5d81d71735744, type: 3}
       propertyPath: m_Enabled
       value: 0

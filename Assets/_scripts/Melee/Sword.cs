@@ -8,6 +8,7 @@ public class Sword : MonoBehaviour
     
     Player PlayerScript;
     Collider obj;
+    MeshRenderer mesh;
 
     float knockback = 3;
     Vector3 knockbackDir = Vector3.forward + (Vector3.up * 1.8f);
@@ -16,6 +17,7 @@ public class Sword : MonoBehaviour
     {
         PlayerScript = PlayerObject.GetComponent<Player>();
         obj = GetComponentInChildren<Collider>();
+        mesh = GetComponentInChildren<MeshRenderer>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -39,11 +41,11 @@ public class Sword : MonoBehaviour
 
     private void SwapAwayFinished()
     {
+        mesh.enabled = false;
         PlayerScript.SwapRangedIn();
-        gameObject.SetActive(false);
     }
 
-    private void SwapInFinished()
+    public void SwapInFinished()
     {
         PlayerScript.SwingCooldown(false);
         obj.isTrigger = false;
@@ -52,5 +54,15 @@ public class Sword : MonoBehaviour
     private void ColliderOff()
     {
         obj.isTrigger = true;
+    }
+
+    private void ColliderOn()
+    {
+        obj.isTrigger = false;
+    }
+
+    private void MeshEnabled()
+    {
+        mesh.enabled = true;
     }
 }

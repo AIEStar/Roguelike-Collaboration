@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f58b5d6697d3445b4bd333b924ac0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplodeParticle: {fileID: 8866987181904549775, guid: 8c8d8385f96bd054a88a3df780d77bcc, type: 3}
+  Hit: {fileID: 8866987181904549775, guid: 8c8d8385f96bd054a88a3df780d77bcc, type: 3}
   BallStart: {fileID: 6261345114989098648, guid: 0c8f61db0d1f92042a56acaccfa81838, type: 3}
   BallEnd: {fileID: 6261345114989098648, guid: 1b6f476139f3c064ca7ebdd5981120ab, type: 3}
 --- !u!54 &2213092589542006824

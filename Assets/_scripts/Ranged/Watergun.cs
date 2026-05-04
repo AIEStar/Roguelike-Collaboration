@@ -11,6 +11,7 @@ public class Watergun : MonoBehaviour
     public LayerMask mask;
     
     Player PlayerScript;
+    MeshRenderer mesh;
 
     float knockback = 3;
     Vector3 knockbackDir = Vector3.forward + (Vector3.up * 1.8f);
@@ -18,7 +19,8 @@ public class Watergun : MonoBehaviour
     void Start()
     {
         PlayerScript = PlayerObject.GetComponent<Player>();
-        gameObject.SetActive(false);
+        mesh = GetComponentInChildren<MeshRenderer>();
+        mesh.enabled = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -42,8 +44,8 @@ public class Watergun : MonoBehaviour
 
     private void SwapAwayFinished()
     {
+        mesh.enabled = false;
         PlayerScript.SwapMeleeIn();
-        gameObject.SetActive(false);
     }
 
     private void SwapInFinished()
@@ -57,5 +59,10 @@ public class Watergun : MonoBehaviour
         {
             Instantiate(BallPrefab, NozzlePos.position, Quaternion.LookRotation(info.point - NozzlePos.position, Vector3.up));
         }
+    }
+
+    private void MeshEnabled()
+    {
+        mesh.enabled = true;
     }
 }
