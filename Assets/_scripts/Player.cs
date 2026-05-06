@@ -10,11 +10,9 @@ public class Player : MonoBehaviour
     const int wobbleDivisorMoving = 50;
     const int wobbleDivisorIdle = 120;
     const float wobbleMaxY = 0.03f;
-    const float meleeCooldown = 3.5f;
 
     float animationTimer = -1;
     int animationTimerDir = 1;
-    float meleeCooldownTimer = 0;
     float animationWobbleDivisor = 50;
     bool animate = true;
     bool swing = false;

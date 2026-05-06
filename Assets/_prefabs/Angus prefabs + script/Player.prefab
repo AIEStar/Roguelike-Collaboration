@@ -73,8 +73,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c016bcb01b94ea4eb4dbdfdc474c15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
+  walkSpeed: 3
   jumpHeight: 3
+  runSpeed: 6
   fallGravityMultiplyer: 2.3
   mouseSensitivity: 5
   pitchRange: 60

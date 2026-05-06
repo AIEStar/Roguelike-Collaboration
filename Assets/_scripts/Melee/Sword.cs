@@ -7,8 +7,8 @@ public class Sword : MonoBehaviour
     public Transform PlayerObject;
     
     Player PlayerScript;
-    Collider obj;
-    MeshRenderer mesh;
+    Collider[] objCollider;
+    MeshRenderer[] mesh;
 
     float knockback = 3;
     Vector3 knockbackDir = Vector3.forward + (Vector3.up * 1.8f);
@@ -16,8 +16,10 @@ public class Sword : MonoBehaviour
     void Start()
     {
         PlayerScript = PlayerObject.GetComponent<Player>();
-        obj = GetComponentInChildren<Collider>();
-        mesh = GetComponentInChildren<MeshRenderer>();
+        objCollider = GetComponentsInChildren<Collider>();
+        mesh = GetComponentsInChildren<MeshRenderer>();
+        
+        ColliderOff();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -30,7 +32,10 @@ public class Sword : MonoBehaviour
             collision.body.GetComponent<Rigidbody>().AddForceAtPosition(newKnockback, contact.point, ForceMode.Impulse);
 
             //custom actions
-            collision.body.GetComponent<Enemy>().MeleeHit();
+            var enemy = collision.body.GetComponent<Enemy>();
+            enemy.MeleeHit();
+            //var enemy = collision.body.GetComponent<Enemy>();
+            //if(enemy.GetType() == typeof(Dummy)) {}
         }
     }
 
@@ -41,28 +46,45 @@ public class Sword : MonoBehaviour
 
     private void SwapAwayFinished()
     {
-        mesh.enabled = false;
+        MeshDisabled();
         PlayerScript.SwapRangedIn();
     }
 
     public void SwapInFinished()
     {
         PlayerScript.SwingCooldown(false);
-        obj.isTrigger = false;
+        ColliderOn();
     }
 
     private void ColliderOff()
     {
-        obj.isTrigger = true;
+        foreach (Collider c in objCollider)
+        {
+            c.isTrigger = true;
+        }
     }
 
     private void ColliderOn()
     {
-        obj.isTrigger = false;
+        foreach (Collider c in objCollider)
+        {
+            c.isTrigger = false;
+        }
     }
 
     private void MeshEnabled()
     {
-        mesh.enabled = true;
+        foreach (MeshRenderer m in mesh)
+        {
+            m.enabled = true;
+        }
+    }
+
+    private void MeshDisabled()
+    {
+        foreach (MeshRenderer m in mesh)
+        {
+            m.enabled = false;
+        }
     }
 }
