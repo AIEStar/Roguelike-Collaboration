@@ -10,8 +10,7 @@ public class Sword : MonoBehaviour
     Collider[] objCollider;
     MeshRenderer[] mesh;
 
-    float knockback = 3;
-    Vector3 knockbackDir = Vector3.forward + (Vector3.up * 1.8f);
+    Vector3 knockbackDir = (Vector3.forward * 0.4f) + Vector3.up;
 
     void Start()
     {
@@ -24,16 +23,15 @@ public class Sword : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.body.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             //knockback
             ContactPoint contact = collision.contacts[0];
-            Vector3 newKnockback = (PlayerObject.rotation * knockbackDir) * knockback;
-            collision.body.GetComponent<Rigidbody>().AddForceAtPosition(newKnockback, contact.point, ForceMode.Impulse);
+            Vector3 newKnockback = PlayerObject.rotation * knockbackDir;
 
             //custom actions
             var enemy = collision.body.GetComponent<Enemy>();
-            enemy.MeleeHit();
+            enemy.MeleeHit(newKnockback, contact.point);
             //var enemy = collision.body.GetComponent<Enemy>();
             //if(enemy.GetType() == typeof(Dummy)) {}
         }

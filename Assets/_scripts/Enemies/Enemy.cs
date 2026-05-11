@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    const float knockbackStrength = 8;
+
     public float health;
 
     void Start()
@@ -16,9 +18,9 @@ public class Enemy : MonoBehaviour
         
     }
 
-    public virtual void MeleeHit()
+    public virtual void MeleeHit(Vector3 knockback, Vector3 point)
     {
-        //do something
+        GetComponent<Rigidbody>().AddForceAtPosition(knockback * knockbackStrength, point, ForceMode.Impulse);
     }
 
     public virtual void RangedHit()
